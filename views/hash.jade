@@ -6,7 +6,25 @@ block content
   br
   .container
     .row
-      .col-xs-6
+
+      .col-xs-8
+        h4 Input #{__('here')}
+        hr
+        br
+        .well#well1
+          form.form-horizontal
+
+            .form-group
+              label.col-sm-2.control-label(for='data') #{__('Data')}:
+              .col-sm-10
+                textarea#data.form-control(rows='5', oninput='$("#hash").val(sha256())', onclick='$("#hash").val(sha256())')
+        
+            .form-group
+              label.col-sm-2.control-label(for='hash') #{__('Hash')}:
+              .col-sm-10
+                input#hash.form-control(type='text', style="font-family:Courier New;", disabled)
+
+      .col-xs-4
         h4 Choose a #{__('Data Source')}
         hr
 
@@ -19,7 +37,7 @@ block content
                 .card-body
                   br
                   p New York Times Articles
-                  p(class="small") Click here to choose a category from New York Times Website
+                  p(class="small") Click here to choose a story from New York Times
 
         a#popup_SP(href='#')
           .card(class = "card text-left")
@@ -31,26 +49,14 @@ block content
                   br
                   p Shakespeare Play
                   p(class="small") Choose from a list of most-quoted lines from Shakespeare play:  Hamlet, Macbeth, A Midsummer Night's Dream.
-      
-      .col-xs-6
-        h4 Or Input #{__('here')}
-        hr
-        br
-        .well#well1
-          form.form-horizontal
 
-            .form-group
-              label.col-sm-2.control-label(for='data') #{__('Data')}:
-              .col-sm-10
-                textarea#data.form-control(rows='5', oninput='$("#hash").val(sha256())', onclick='$("#hash").val(sha256())')
-
-            .form-group
-              label.col-sm-2.control-label(for='hash') #{__('Hash')}:
-              .col-sm-10
-                input#hash.form-control(type='text', disabled)
 
   center
     .button(id="addHashButton" class = "btn btn-primary") Save
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    .button(id="deleteHashButton" class = "btn btn-primary") Delete Last One
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    .button(id="deleteallHashButton" class = "btn btn-primary") Delete All
 
 
   .container 
@@ -64,6 +70,27 @@ block content
 
 
   script.
+
+    var i = 0;
+
+    function getCookie(name){
+      var cookie = "; " + document.cookie;
+      //document.write(cookie);
+      var parts = cookie.split("; " + name + "=");
+      if(parts.length == 2) return parts.pop().split(";").shift();
+      return 0
+    };
+    
+    var total_i = getCookie("total_i");
+    while(i < total_i){
+      name = "hash_history" + (i+1).toString();
+      //document.write(i);
+      value = getCookie(name);
+
+      //document.write(value);
+      addHistoryByName(value);
+    };
+
     function getText(block, chain) {
       return $('#data').val();
     }
@@ -80,28 +107,75 @@ block content
       window.open('/popup_SP', '_blank', 'toolbar=no,menubar=no,scrollbars=yes,width=1200,height=900')
     });
 
-
+ 
     $("#addHashButton").click(function(e) {
       e.preventDefault();
-      var li = document.createElement("li");
+      addHistory();
       
-      collapseId = "collapse" + Date.now();
+    });
+    
+    function addHistoryByName(val){
+      var li = document.createElement("li");
+
+      i = i+1;
+
+      // **************************************************************************
+      document.cookie = "hash_history" + i.toString() + "=" + val + ";";
+      document.cookie = "total_i=" + i.toString() + ";";
+      // **************************************************************************
+
+      collapseId = "collapse" + i;
 
       var collapsedDiv = document.createElement("div");
       collapsedDiv.setAttribute("id", collapseId);
+      collapsedDiv.setAttribute("style", "font-family:Courier New;");
       
       var inputWell = document.createElement("div");
       inputWell.className += "well input-well";
 
+      inputWell.style.height = '50px';
       inputWell.style.width = '500px';
 
-      var inputArea = document.createElement("textarea");
-      inputArea.className="form-control";
-      inputArea.setAttribute("disabled", true);
-      inputArea.setAttribute("rows",10);
-      inputArea.value = $("#data").val();
+      collapsedDiv.appendChild(inputWell);
 
-      //inputWell.appendChild(inputArea);
+      li.setAttribute("data-toggle", "collapse");
+      li.setAttribute("data-target", "#" + collapseId);
+      
+      var newHashVal = document.createTextNode(val);
+      //newHashVal.setAttribute("style", "font-family:Courier New;");
+
+      inputWell.appendChild(newHashVal);
+      li.appendChild(collapsedDiv);
+      $("#hash-list").append(li);
+      $(".input-well").click(function(e) {
+        e.stopPropagation();
+      })      
+
+    }
+
+    function addHistory(){
+
+      var li = document.createElement("li");
+
+      i = i+1;
+
+      // **************************************************************************
+      value = $("#hash").val();
+      document.cookie = "hash_history" + i.toString() + "=" + value + ";";
+      document.cookie = "total_i=" + i.toString() + ";";
+      // **************************************************************************
+
+      collapseId = "collapse" + i;
+
+      var collapsedDiv = document.createElement("div");
+      collapsedDiv.setAttribute("id", collapseId);
+      collapsedDiv.setAttribute("style", "font-family:Courier New;");
+      
+      var inputWell = document.createElement("div");
+      inputWell.className += "well input-well";
+
+      inputWell.style.height = '50px';
+      inputWell.style.width = '500px';
 
       collapsedDiv.appendChild(inputWell);
 
@@ -109,7 +183,7 @@ block content
       li.setAttribute("data-target", "#" + collapseId);
       
       var newHashVal = document.createTextNode($("#hash").val());
-      //newHashVal.style.width = '200px';
+      //newHashVal.setAttribute("style", "font-family:Courier New;");
 
       inputWell.appendChild(newHashVal);
       li.appendChild(collapsedDiv);
@@ -117,5 +191,24 @@ block content
       $(".input-well").click(function(e) {
         e.stopPropagation();
       })
+
+    };
+
+    $("#deleteHashButton").click(function(e) {
+      remove();
+    });
+
+    function remove(){
+      if (i!=0) {
+      $('#collapse' + i).remove(); 
+      i=i-1;
+      document.cookie = "total_i=" + i.toString() + ";";
+      }
+    };
+
+    $("#deleteallHashButton").click(function(e) {
+      while(i>0){
+        remove();
+      }
     });
 
