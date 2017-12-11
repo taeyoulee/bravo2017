@@ -3,61 +3,127 @@ extends layout
 block content
   br
   br
+
   .container
-        center
-          h4 Let's build a #{__('block')}
-          br
-          hr
-          br
-          .well#block1chain1well
-            form.form-horizontal
+    center#center
+      h4 Let's build a #{__('block')}
+      br
+      hr
+      br
+      .well#block1chain1well
+        form.form-horizontal
+          .form-group
+            label.col-sm-2.control-label(for='block1chain1number') #{__('Block')}:
+            .col-sm-10
+              .input-group
+                span.input-group-addon #
+                input#block1chain1number.form-control(type='text', value='1' onkeyup='$("#hash1").val(sha256(1,1))')
 
-              .form-group
-                label.col-sm-2.control-label(for='block1chain1number') #{__('Block')}:
-                .col-sm-10
-                  .input-group
-                    span.input-group-addon #
-                    input#block1chain1number.form-control(type='text', value='1' onkeyup='updateHash(1, 1);')
+          .form-group
+            label.col-sm-2.control-label(for='block1chain1tx') #{__('Tx')}:
+            .col-sm-2
+              .input-group
+                .input-group-addon #{__('$')}
+                input.form-control(id='block1chain1value', type='text', value='1', onkeyup='$("#hash1").val(sha256(1,1))')
+            .col-sm-8
+              .input-group
+                .input-group-addon #{__('From')}
+                select.form-control(id='block1chain1from', onclick='$("#hash1").val(sha256(1,1))')
+                  option(value = 'Raymond') Raymond
+                  option(value = 'Peter') Peter
+                  option(value = 'Johnny') Johnny
+                .input-group-addon #{__('To')}
+                select.form-control(id='block1chain1to', onclick='$("#hash1").val(sha256(1,1))')
+                  option(value = 'Raymond') Raymond
+                  option(value = 'Paul') Paul
+                  option(value = 'Johny') Johnny
+          .form-group
+            label.col-sm-2.control-label(for='hash') #{__('Hash')}:
+            .col-sm-10
+              input#hash1.form-control(type='text', disabled)
+          .form-group
+            .button(id="buildButton" class = "btn btn-primary") Build a block
 
-              .form-group
-                label.col-sm-2.control-label(for='block1chain1data') #{__('Data')}:
-                .col-sm-10
-                  textarea#block1chain1data.form-control(onkeyup='updateHash(1, 1);')
+      .well#block2chain1well(style="display:none")
+        form.form-horizontal
+          .form-group
+            label.col-sm-2.control-label(for='block2chain1number') #{__('Block')}:
+            .col-sm-10
+              .input-group
+                span.input-group-addon #
+                input#block2chain1number.form-control(type='text', value='1', disabled)
 
-              .form-group
-                label.col-sm-2.control-label(for='block1chain1nonce') #{__('Nonce')}:
-                .col-sm-10
-                   input#block1chain1nonce.form-control(type='text', value='72608', onkeyup='updateHash(1, 1);')
-              
-              .form-group
-                label.col-sm-2.control-label(for='block1chain1difficulty') #{__('Difficulty')}:
-                .col-sm-10
-                   input#block1chain1difficulty.form-control(type='text', value='2', onkeyup='updateHash(1, 1);')
+          .form-group
+            label.col-sm-2.control-label(for='hash2') #{__('Hash')}:
+            .col-sm-10
+              input#hash2.form-control(type='text', disabled)
 
-              #state.form-group
-                label.col-sm-2.control-label(for='block1chain1hash') #{__('Hash')}:
-                .col-sm-10
-                  input#block1chain1hash.form-control(type='text', disabled)
+          .form-group
+            label.col-sm-2.control-label(for='block2chain1tx') #{__('Tx')}:
+            .col-sm-2
+              .input-group
+                .input-group-addon #{__('$')}
+                input.form-control(id='block2chain1value', type='text', value='1', disabled)
+            .col-sm-8
+              .input-group
+                .input-group-addon #{__('From')}
+                select.form-control(id='block2chain1from', disabled)
+                  option(value = 'Raymond') Raymond
+                  option(value = 'Peter') Peter
+                  option(value = 'Johnny') Johnny
+                .input-group-addon #{__('To')}
+                select.form-control(id='block2chain1to', disabled)
+                  option(value = 'Raymond') Raymond
+                  option(value = 'Paul') Paul
+                  option(value = 'Johny') Johnny
+          .form-group
+            label.col-sm-2.control-label(for='block2chain1nonce') #{__('Nonce')}:
+            .col-sm-10
+               input#block2chain1nonce.form-control(type='text', value='72608')
+          
+          .form-group
+            label.col-sm-2.control-label(for='block2chain1difficulty') #{__('Difficulty')}:
+            .col-sm-10
+               input#block2chain1difficulty.form-control(type='text', value='2')
+           #state.form-group
+              label.col-sm-2.control-label(for='block2chain1hash') #{__('Hash After Mining')}:
+              .col-sm-10
+                input#block2chain1hash.form-control(type='text', disabled)
 
-              .form-group
-                .col-sm-2
-                  i.icon-spinner.icon-spin.icon-large
-                .col-sm-10
-                  button#block1chain1mineButton.btn.btn-primary.ladda-button(data-style='expand-right')
-                    span.ladda-label #{__('Mine')}
+          .form-group
+            //.col-sm-2
+            //  i.icon-spinner.icon-spin.icon-large
+            
+            button#block2chain1mineButton.btn.btn-primary.ladda-button(data-style='expand-right')
+              span.ladda-label #{__('Mine')}
 
   script.
     $(function() {
-      mineButtonAnimation(1, 1);
-      updateHash(1, 1);
+      mineButtonAnimation(2, 1);
+      // updateHash(1, 1);
+      $("#hash1").val(sha256());
+      $("#hash2").val(sha256());
+      //$("block2chain1well").hide();
     });
 
     function getText(block, chain) {
       return $('#block'+block+'chain'+chain+'number').val() +
-             $('#block'+block+'chain'+chain+'data').val() +
-             $('#block'+block+'chain'+chain+'nonce').val()
+             $('#block'+block+'chain'+chain+'value').val() + 
+             $('#block'+block+'chain'+chain+'from').val() + 
+             $('#block'+block+'chain'+chain+'to').val() +
+             $('#block'+block+'chain'+chain+'nonce').val() +
              $('#block'+block+'chain'+chain+'difficulty').val();
     }
+
+    $("#buildButton").click(function(e) {
+      $('#block2chain1well').show();
+      $('#block2chain1number').val($('#block1chain1number').val());
+      $('#block2chain1value').val($('#block1chain1value').val());
+      $('#block2chain1from').val($('#block1chain1from').val());
+      $('#block2chain1to').val($('#block1chain1to').val());
+      $('#hash2').val($('#hash1').val());
+      $('#block2chain1hash').val($('#hash1').val());
+    });
 
     function mineButtonAnimation(block, chain) {
       $('#block'+block+'chain'+chain+'mineButton').click(function(e) {
@@ -70,3 +136,5 @@ block content
             }, 250); // give UI time to update
         });
     }
+
+    //- $("#hash").val(sha256());

@@ -9094,7 +9094,7 @@
                 style: {
                     marginRight: "15px"
                 }
-            }, "HASH"), o.a.createElement(l.a, {
+            }, "Hash"), o.a.createElement(l.a, {
                 color: r(e.hash),
                 style: {
                     display: "block",
@@ -15717,7 +15717,8 @@
                             position: "relative",
                             zIndex: "999"
                         }
-                    }, "Peers"), s.a.createElement(c.a, {
+                    }, "Peers"), 
+                    s.a.createElement(c.a, {
                         tourVisibility: this.tourVisibility
                     })))
                 }
@@ -17503,7 +17504,7 @@
                 onClick: function() {
                     e.addPeer()
                 }
-            }, "Add Peer")
+            }, "+ Peer")
         };
     d.propTypes = {
         addPeer: s.a.func
@@ -25680,7 +25681,7 @@
         }, o.a.createElement("h1", {
             style: {
                 textAlign: "center",
-                fontSize: "24pt",
+                fontSize: "16pt",
                 marginBottom: "33px",
                 letterSpacing: "3px",
                 position: "relative",
@@ -26046,7 +26047,7 @@
                 style: {
                     whiteSpace: "nowrap"
                 }
-            }, "PREVIOUS HASH"), i.a.createElement(a.a, {
+            }, "Prev Hash"), i.a.createElement(a.a, {
                 color: 0 === t ? "green" : Object(l.b)(n),
                 style: {
                     fontSize: "8pt",
@@ -26167,7 +26168,7 @@
                         marginRight: "7px",
                         marginLeft: "7px"
                     }
-                }, "DATA"),
+                }, "Data"),
                 defaultValue: e.data,
                 onChange: function(t) {
                     e.mutateData(e.peer, e.blockIndex, t.target.value)
@@ -26364,7 +26365,7 @@
             }, "on ", new Date(e.timestamp).toUTCString());
             return i.a.createElement("div", {
                 style: {
-                    fontSize: "24px",
+                    fontSize: "12px",
                     whiteSpace: "nowrap",
                     overflow: "auto"
                 }
@@ -26373,7 +26374,7 @@
                     letterSpacing: "1px"
                 },
                 className: "genesis-index"
-            }, "GENESIS BLOCK") : i.a.createElement("span", {
+            }, "BLOCK # Genesis Block") : i.a.createElement("span", {
                 style: {
                     letterSpacing: ".5px"
                 }
@@ -26508,7 +26509,7 @@
                         marginRight: "7px",
                         marginLeft: "7px"
                     }
-                }, "DATA"),
+                }, "Data"),
                 defaultValue: e.data,
                 onChange: function(t) {
                     return e.changeData(t)
@@ -27129,7 +27130,7 @@
                             e && this.setState({
                                 canvas: e
                             }, function() {
-                                t.state.library.loadCanvas(t.state.canvas), t.state.library.start()
+                                // t.state.library.loadCanvas(t.state.canvas), t.state.library.start()
                             })
                         }
                     }, {

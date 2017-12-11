@@ -25,5 +25,12 @@
 	"Difficulty": "Difficulty",
 	"+ Add New Block": "+ Add New Block",
 	"New Block": "New Block",
-	"Add New Block": "Add New Block"
+	"Add New Block": "Add New Block",
+	"Transaction": "Transaction",
+	"Sender": "Sender",
+	"Receipient": "Receipient",
+	"Sdr": "Sdr",
+	"Rpt": "Rpt",
+	"To": "To",
+	"Hash After Mining": "Hash After Mining"
 }

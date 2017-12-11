@@ -4995,7 +4995,7 @@ textarea.ant-input {
 }
 .ant-btn-primary {
     color: #fff;
-    background-color: #108ee9;
+    background-color: #0081CC;
     border-color: #108ee9
 }
 .ant-btn-primary>a:only-child {
@@ -19098,11 +19098,11 @@ form .ant-input-number {
     margin-top: 30px;
     margin-bottom: 10px;
     border-radius: 6.25em;
-    padding: 20px 25px;
+    padding: 10px 15px;
     height: auto;
-    background: -webkit-linear-gradient(45deg, #d4145a, #fbb03b);
-    background: -o-linear-gradient(45deg, #d4145a, #fbb03b);
-    background: linear-gradient(45deg, #d4145a, #fbb03b);
+    background: -webkit-linear-gradient(45deg, #0081CC, #002032);
+    background: -o-linear-gradient(45deg, #0081CC, #002032);
+    background: linear-gradient(45deg, #0081CC, #002032);
     border: none;
     color: #fff
 }
