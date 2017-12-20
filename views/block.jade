@@ -13,14 +13,17 @@ block content
       .well#block1chain1well
         form.form-horizontal
           .form-group
-            label.col-sm-2.control-label(for='block1chain1number') #{__('Block')}:
+            label.col-sm-2.control-label(for='block1chain1number') #{__('Block')}:  
+              span#indexspan(class="glyphicon glyphicon-info-sign", data-toggle="tooltip", data-placement="bottom", title="The index is the position of the block in the chain. The genesis block has an index of 0. The next block will have an index of 1." )
             .col-sm-10
               .input-group
                 span.input-group-addon #
-                input#block1chain1number.form-control(type='text', value='1' onkeyup='$("#hash1").val(sha256(1,1))')
+                input#block1chain1number.form-control(type='text', value='1', onkeyup='$("#hash1").val(sha256(1,1))')
+
 
           .form-group
-            label.col-sm-2.control-label(for='block1chain1tx') #{__('Tx')}:
+            label.col-sm-2.control-label(for='block1chain1tx') #{__('Tx')}: 
+              span#txspan(class="glyphicon glyphicon-info-sign", data-toggle="tooltip", data-placement="bottom", title="The transaction contains information of amount, recipient, and sender, which will be also part of hashed data when mining." )
             .col-sm-2
               .input-group
                 .input-group-addon #{__('$')}
@@ -38,11 +41,17 @@ block content
                   option(value = 'Paul') Paul
                   option(value = 'Johny') Johnny
           .form-group
-            label.col-sm-2.control-label(for='hash') #{__('Hash')}:
+            label.col-sm-2.control-label(for='hash') #{__('Hash')}: 
+              span#hashspan(class="glyphicon glyphicon-info-sign", data-toggle="tooltip", data-placement="bottom", title="All the values above will be hashed by SHA256 into fixed-length value." )
             .col-sm-10
               input#hash1.form-control(type='text', disabled)
           .form-group
-            .button(id="buildButton" class = "btn btn-primary") Build a block
+            .button(id="buildButton" class = "btn btn-primary") 
+              span#buttonspan(data-toggle="tooltip", data-placement="bottom", title="Build a block to continue" ) Build a block
+
+      span#arrow(class = "glyphicon glyphicon-arrow-down", style="display:none")
+      br 
+      br
 
       .well#block2chain1well(style="display:none")
         form.form-horizontal
@@ -77,16 +86,19 @@ block content
                   option(value = 'Paul') Paul
                   option(value = 'Johny') Johnny
           .form-group
-            label.col-sm-2.control-label(for='block2chain1nonce') #{__('Nonce')}:
+            label.col-sm-2.control-label(for='block2chain1nonce') #{__('Nonce')}: 
+              span#noncespan(class = 'glyphicon glyphicon-info-sign', data-toggle="tooltip", data-placement="bottom", title="The nonce is the number used to find a valid hash. The nonce iterates from 0 until a valid hash is found. " )
             .col-sm-10
                input#block2chain1nonce.form-control(type='text', value='72608')
           
           .form-group
-            label.col-sm-2.control-label(for='block2chain1difficulty') #{__('Difficulty')}:
+            label.col-sm-2.control-label(for='block2chain1difficulty') #{__('Difficulty')}: 
+              span#diffspan(class = 'glyphicon glyphicon-info-sign', data-toggle="tooltip", data-placement="top", title="As difficulty increases, the number of possible valid hashes decreases. With less possible valid hashes, it takes more processing power to find a valid hash." )
             .col-sm-10
                input#block2chain1difficulty.form-control(type='text', value='2')
            #state.form-group
-              label.col-sm-2.control-label(for='block2chain1hash') #{__('Hash After Mining')}:
+              label.col-sm-2.control-label(for='block2chain1hash') #{__('Hash After Mining')}: 
+                span#minedhashspan(class = 'glyphicon glyphicon-info-sign', data-toggle="tooltip", data-placement="top", title="Notice the first few digits are 0 as the number of difficulty indicated after you mine the block." )
               .col-sm-10
                 input#block2chain1hash.form-control(type='text', disabled)
 
@@ -103,6 +115,7 @@ block content
       // updateHash(1, 1);
       $("#hash1").val(sha256());
       $("#hash2").val(sha256());
+      $('[data-toggle="tooltip"]').tooltip(); 
       //$("block2chain1well").hide();
     });
 
@@ -116,6 +129,7 @@ block content
     }
 
     $("#buildButton").click(function(e) {
+      $('#arrow').show();
       $('#block2chain1well').show();
       $('#block2chain1number').val($('#block1chain1number').val());
       $('#block2chain1value').val($('#block1chain1value').val());

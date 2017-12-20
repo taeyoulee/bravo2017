@@ -2,6 +2,212 @@ extends layout
 
 block content
   br
+  br
+
   .container
-    #root
-  script(src='/javascripts/main.71f4912c.js')
+    center#center
+      .well#block1chain1well
+        form.form-horizontal
+          .form-group
+            label.col-sm-2.control-label(for='block1chain1number') #{__('Block')}: 
+                span#indexspan(class="glyphicon glyphicon-info-sign", data-toggle="tooltip", data-placement="bottom", title="The index is the position of the block in the chain. The genesis block has an index of 0. The next block will have an index of 1." )
+            .col-sm-10
+              .input-group
+                span.input-group-addon #
+                input#block1chain1number.form-control(type='text', value='1', disabled)
+
+          .form-group
+            label.col-sm-2.control-label(for='block1chain1tx') #{__('Tx')}: 
+                span#txspan(class="glyphicon glyphicon-info-sign", data-toggle="tooltip", data-placement="bottom", title="The transaction contains information of amount, recipient, and sender, which will be also part of hashed data when mining." )
+            .col-sm-2
+              .input-group
+                .input-group-addon #{__('$')}
+                input.form-control(id='block1chain1value', type='text', value='1', onkeyup='$("#block1chain1hash").val(sha256(1,1))')
+            .col-sm-8
+              .input-group
+                .input-group-addon #{__('From')}
+                select.form-control(id='block1chain1from', onclick='$("#block1chain1hash").val(sha256(1,1))')
+                  option(value = 'Raymond') Raymond
+                  option(value = 'Peter') Peter
+                  option(value = 'Johnny') Johnny
+                .input-group-addon #{__('To')}
+                select.form-control(id='block1chain1to', onclick='$("#block1chain1hash").val(sha256(1,1))')
+                  option(value = 'Paul') Paul
+                  option(value = 'Johny') Johnny
+                  option(value = 'Raymond') Raymond
+          .form-group
+            label.col-sm-2.control-label(for='block1chain1nonce') #{__('Nonce')}: 
+                span#noncespan(class = 'glyphicon glyphicon-info-sign', data-toggle="tooltip", data-placement="bottom", title="The nonce is the number used to find a valid hash. The nonce iterates from 0 until a valid hash is found. " )
+            .col-sm-10
+               input#block1chain1nonce.form-control(type='text', value='0')
+          
+          .form-group(style="display:none")
+            label.col-sm-2.control-label(for='block1chain1difficulty') #{__('Difficulty')}:
+            .col-sm-10
+               input#block1chain1difficulty.form-control(type='text', value='3')
+
+          #state.form-group
+            label.col-sm-2.control-label(for='block1chain1previous') #{__('Prev')}: 
+                span#prevspan(class="glyphicon glyphicon-info-sign", data-toggle="tooltip", data-placement="bottom", title="Previous hash will also be included in the values to be hashed." )
+            .col-sm-10
+              input.form-control(id='block1chain1previous', type='text', disabled, value='0000000000000000000000000000000000000000000000000000000000000000')
+
+           #state.form-group
+              label.col-sm-2.control-label(for='block1chain1hash') #{__('Hash')}: 
+                span#hashspan(class="glyphicon glyphicon-info-sign", data-toggle="tooltip", data-placement="bottom", title="All the values above will be hashed by SHA256 into fixed-length value." )
+              .col-sm-10
+                input#block1chain1hash.form-control(type='text', disabled)
+
+          .form-group
+            //.col-sm-2
+            //  i.icon-spinner.icon-spin.icon-large
+            
+            button#block1chain1mineButton.btn.btn-primary.ladda-button(data-style='expand-right')
+              span.ladda-label #{__('+ Add New Block')}
+
+  script.
+    $(function() {
+      mineButtonAnimation(1, 1);
+      // updateHash(1, 1);
+      $("#block1chain1hash").val(sha256(1,1));
+      $('[data-toggle="tooltip"]').tooltip(); 
+      //$("block1chain1well").hide();
+    });
+
+    function getText(block, chain) {
+      return $('#block'+block+'chain'+chain+'number').val() +
+             $('#block'+block+'chain'+chain+'value').val() + 
+             $('#block'+block+'chain'+chain+'from').val() + 
+             $('#block'+block+'chain'+chain+'to').val() +
+             $('#block'+block+'chain'+chain+'previous').val() +
+             $('#block'+block+'chain'+chain+'nonce').val() +
+             $('#block'+block+'chain'+chain+'difficulty').val();
+    }
+
+    //- $("#buildButton").click(function(e) {
+    //-   $('#arrow').show();
+    //-   $('#block1chain1well').show();
+    //-   $('#block1chain1number').val($('#block1chain1number').val());
+    //-   $('#block1chain1value').val($('#block1chain1value').val());
+    //-   $('#block1chain1from').val($('#block1chain1from').val());
+    //-   $('#block1chain1to').val($('#block1chain1to').val());
+    //-   $('#hash2').val($('#hash1').val());
+    //-   $('#block1chain1hash').val($('#hash1').val());
+    //- });
+
+    function addnewblock(block, chain){
+        var $center = $( "#center" );
+        var next_block="";
+        next_block += "<span class = \"glyphicon glyphicon-arrow-down\"><\/span><br><br>";
+        next_block += "<div id=\"block";
+        next_block += block+1;
+        next_block += "chain1well\" class=\"well\">";
+        next_block += "   <form class=\"form-horizontal\">";
+        next_block += "      <div class=\"form-group\">";
+        next_block += "         <label for=\"block1chain1number\" class=\"col-sm-2 control-label\">Block: <span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"The index is the position of the block in the chain. The genesis block has an index of 0. The next block will have an index of 1.\" class=\"glyphicon glyphicon-info-sign\"><\/span><\/label>";
+        next_block += "         <div class=\"col-sm-10\">";
+        next_block += "            <div class=\"input-group\"><span class=\"input-group-addon\">#<\/span><input id=\"block";
+        next_block += block+1;
+        next_block += "chain1number\" type=\"text\" value=\"";
+        next_block += block+1;
+        next_block += "\" disabled class=\"form-control\"><\/div>";
+        next_block += "         <\/div>";
+        next_block += "      <\/div>";
+        next_block += "      <div class=\"form-group\">";
+        next_block += "         <label for=\"block1chain1tx\" class=\"col-sm-2 control-label\">Tx: <span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"The transaction contains information of amount, recipient, and sender, which will be also part of hashed data when mining.\" class=\"glyphicon glyphicon-info-sign\"><\/span><\/label>";
+        next_block += "         <div class=\"col-sm-2\">";
+        next_block += "            <div class=\"input-group\">";
+        next_block += "               <div class=\"input-group-addon\">$<\/div>";
+        next_block += "               <input id=\"block";
+        next_block += block+1;
+        next_block += "chain1value\" type=\"text\" value=\"1\" onkeyup=\"$(&quot;#block";
+        next_block += block+1;
+        next_block += "chain1hash&quot;).val(sha256(";
+        next_block += block+1;
+        next_block += ",1))\" class=\"form-control\">";
+        next_block += "            <\/div>";
+        next_block += "         <\/div>";
+        next_block += "         <div class=\"col-sm-8\">";
+        next_block += "            <div class=\"input-group\">";
+        next_block += "               <div class=\"input-group-addon\">From<\/div>";
+        next_block += "               <select id=\"block";
+        next_block += block+1;
+        next_block += "chain1from\" onclick=\"$(&quot;#block";
+        next_block += block+1;
+        next_block += "chain1hash&quot;).val(sha256(";
+        next_block += block+1;
+        next_block += ",1))\" class=\"form-control\">";
+        next_block += "                  <option value=\"Raymond\">Raymond<\/option>";
+        next_block += "                  <option value=\"Peter\">Peter<\/option>";
+        next_block += "                  <option value=\"Johnny\">Johnny<\/option>";
+        next_block += "               <\/select>";
+        next_block += "               <div class=\"input-group-addon\">To<\/div>";
+        next_block += "               <select id=\"block";
+        next_block += block+1;
+        next_block += "chain1to\" onclick=\"$(&quot;#block";
+        next_block += block+1;
+        next_block += "chain1hash&quot;).val(sha256(";
+        next_block += block+1;
+        next_block += ",1))\" class=\"form-control\">";
+        next_block += "                  <option value=\"Paul\">Paul<\/option>";
+        next_block += "                  <option value=\"Johny\">Johnny<\/option>";
+        next_block += "                  <option value=\"Raymond\">Raymond<\/option>";
+        next_block += "               <\/select>";
+        next_block += "            <\/div>";
+        next_block += "         <\/div>";
+        next_block += "      <\/div>";
+        next_block += "      <div class=\"form-group\">";
+        next_block += "         <label for=\"block1chain1nonce\" class=\"col-sm-2 control-label\">Nonce: <span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"The nonce is the number used to find a valid hash. The nonce iterates from 0 until a valid hash is found. \" class=\"glyphicon glyphicon-info-sign\"><\/span><\/label>";
+        next_block += "         <div class=\"col-sm-10\"><input id=\"block";
+        next_block += block+1;
+        next_block += "chain1nonce\" type=\"text\" value=\"0\" class=\"form-control\"><\/div>";
+        next_block += "      <\/div>";
+        next_block += "      <div style=\"display:none\" class=\"form-group\">";
+        next_block += "         <label for=\"block1chain1difficulty\" class=\"col-sm-2 control-label\">Difficulty:<\/label>";
+        next_block += "         <div class=\"col-sm-10\"><input id=\"block";
+        next_block += block+1;
+        next_block += "chain1difficulty\" type=\"text\" value=\"3\" class=\"form-control\"><\/div>";
+        next_block += "      <\/div>";
+        next_block += "      <div id=\"state\" class=\"form-group\">";
+        next_block += "         <label for=\"block1chain1previous\" class=\"col-sm-2 control-label\">Prev: <span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Previous hash will also be included in the values to be hashed.\" class=\"glyphicon glyphicon-info-sign\"><\/span><\/label>";
+        next_block += "         <div class=\"col-sm-10\"><input id=\"block";
+        next_block += block+1;
+        next_block += "chain1previous\" type=\"text\" disabled value=\"\" class=\"form-control\"><\/div>";
+        next_block += "      <\/div>";
+        next_block += "      <div id=\"state\" class=\"form-group\">";
+        next_block += "         <label for=\"block1chain1hash\" class=\"col-sm-2 control-label\">Hash: <span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"All the values above will be hashed by SHA256 into fixed-length value.\" class=\"glyphicon glyphicon-info-sign\"><\/span><\/label>";
+        next_block += "         <div class=\"col-sm-10\"><input id=\"block";
+        next_block += block+1;
+        next_block += "chain1hash\" type=\"text\" disabled class=\"form-control\"><\/div>";
+        next_block += "      <\/div>";
+        next_block += "      <div class=\"form-group\">";
+        next_block += "         <!--.col-sm-2--><!--  i.icon-spinner.icon-spin.icon-large--><button id=\"block";
+        next_block += block+1;
+        next_block += "chain1mineButton\" data-style=\"expand-right\" class=\"btn btn-primary ladda-button\"><span class=\"ladda-label\">+ Add New Block<\/span><\/button>";
+        next_block += "      <\/div>";
+        next_block += "   <\/form>";
+        next_block += "<\/div>";
+        var html = $.parseHTML( next_block )
+        $center.append( html );
+
+    }
+
+    function mineButtonAnimation(block, chain) {
+      var blockNew = block+1;
+      $('#block'+block+'chain'+chain+'mineButton').click(function(e) {
+          e.preventDefault();
+          var l = Ladda.create(this);
+          l.start();
+          setTimeout(function() {
+              mine(block, chain, false);
+              l.stop();
+              $("#block"+blockNew+"chain1previous").val($("#block"+block+"chain1hash").val());
+              mineButtonAnimation(blockNew, 1);
+            }, 250); // give UI time to update
+          addnewblock(block, chain);
+          
+          $("#block"+blockNew+"chain1hash").val(sha256(blockNew,chain));
+          $('[data-toggle="tooltip"]').tooltip(); 
+        });
+    }
+
